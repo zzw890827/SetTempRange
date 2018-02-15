@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="stylesheet.css">
     <script src="assets/jquery-3.3.1.min.js"></script>
     <script src="assets/semantic.min.js"></script>
+    <script src="createTempList.js"></script>
 </head>
 <body>
 
@@ -31,7 +32,7 @@
 <div class="ui main text container">
     <div class="ui divided items">
         <div class="item">
-            <div class="ui selection dropdown">
+            <div class="ui selection dropdown" id="auto">
                 <input name="Auto" type="hidden">
                 <i class="dropdown icon"></i>
                 <div class="default text">Auto</div>
@@ -50,7 +51,7 @@
             </div>
         </div>
         <div class="item">
-            <div class="ui selection dropdown">
+            <div class="ui selection dropdown" id="cool">
                 <input name="Cool" type="hidden">
                 <i class="dropdown icon"></i>
                 <div class="default text">Cool</div>
@@ -61,10 +62,29 @@
             </div>
         </div>
         <div class="item">
-            <div class="ui selection dropdown">
+            <div class="ui selection dropdown" id="heat">
                 <input name="Heat" type="hidden">
                 <i class="dropdown icon"></i>
                 <div class="default text">Heat</div>
+                <div class="menu">
+                    <div class="item" data-value="127">63.5℃</div>
+                    <div class="item" data-value="126">63.0℃</div>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <div class="ui selection dropdown" id="cautocool">
+                <input name="C.Auto.Cool" type="hidden">
+                <i class="dropdown icon"></i>
+                <div class="default text">C.Auto.Cool</div>
+                <div class="menu"></div>
+            </div>
+        </div>
+        <div class="item">
+            <div class="ui selection dropdown" id="cautoheat">
+                <input name="C.Auto.Cool" type="hidden">
+                <i class="dropdown icon"></i>
+                <div class="default text">C.Auto.Cool</div>
                 <div class="menu">
                     <div class="item" data-value="127">63.5℃</div>
                     <div class="item" data-value="126">63.0℃</div>
@@ -76,7 +96,16 @@
 
 <!-- Dropdown有効化 -->
 <script>
-    $('.ui.dropdown')
+    let selElm = $('#cautocool');
+    selElm
+        .dropdown('restore default text')
+    ;
+    selElm
+        .dropdown({
+            values: new TempRange(10, 60).tempList.reverse()
+        })
+    ;
+    $('#auto,#heat,#cool,#cautoheat')
         .dropdown()
     ;
 </script>

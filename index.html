@@ -6,9 +6,79 @@
     <base href="/">
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="assets/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/semantic.min.css"/>
+    <link rel="stylesheet" type="text/css" href="stylesheet.css">
+    <script src="assets/jquery-3.3.1.min.js"></script>
+    <script src="assets/semantic.min.js"></script>
 </head>
 <body>
 
+<!-- 標題欄 -->
+<div class="ui menu">
+    <div class="ui container">
+        <a class="header item">
+            <img class="logo" src="assets/images/airstage.png">
+        </a>
+        <div class="header item borderless">
+            <h1 class="ui header">
+                設定温度上下限UI制限
+            </h1>
+        </div>
+    </div>
+</div>
+
+<!-- 温度上下限領域 -->
+<div class="ui main text container">
+    <div class="ui divided items">
+        <div class="item">
+            <div class="ui selection dropdown">
+                <input name="Auto" type="hidden">
+                <i class="dropdown icon"></i>
+                <div class="default text">Auto</div>
+                <div class="menu">
+                    <div class="item" data-value="127">63.5℃</div>
+                    <div class="item" data-value="126">63.0℃</div>
+                    <div class="item" data-value="125">62.5℃</div>
+                    <div class="item" data-value="124">62.0℃</div>
+                    <div class="item" data-value="123">61.5℃</div>
+                    <div class="item" data-value="122">61.0℃</div>
+                    <div class="item" data-value="121">60.5℃</div>
+                    <div class="item" data-value="120">60.0℃</div>
+                    <div class="item" data-value="119">59.5℃</div>
+                    <div class="item" data-value="118">59.0℃</div>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <div class="ui selection dropdown">
+                <input name="Cool" type="hidden">
+                <i class="dropdown icon"></i>
+                <div class="default text">Cool</div>
+                <div class="menu">
+                    <div class="item" data-value="127">63.5℃</div>
+                    <div class="item" data-value="126">63.0℃</div>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <div class="ui selection dropdown">
+                <input name="Heat" type="hidden">
+                <i class="dropdown icon"></i>
+                <div class="default text">Heat</div>
+                <div class="menu">
+                    <div class="item" data-value="127">63.5℃</div>
+                    <div class="item" data-value="126">63.0℃</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Dropdown有効化 -->
+<script>
+    $('.ui.dropdown')
+        .dropdown()
+    ;
+</script>
 </body>
 </html>

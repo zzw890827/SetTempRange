@@ -41,10 +41,10 @@ var TempData = /** @class */ (function () {
     }
     return TempData;
 }());
+
 /**
  * 設定温度上下限リスト
  */
-
 var TempRange = /** @class */ (function () {
     function TempRange(min, max) {
         this.tempList = [];

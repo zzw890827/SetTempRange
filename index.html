@@ -10,7 +10,13 @@
     <link rel="stylesheet" type="text/css" href="stylesheet.css">
     <script src="assets/jquery-3.3.1.min.js"></script>
     <script src="assets/semantic.min.js"></script>
-    <script src="createTempList.js"></script>
+    <script src="tempList.js"></script>
+    <script src="ajax.js"></script>
+    <script src="csv.min.js"></script>
+    <script src="selRCG.js"></script>
+    <script src="setTempUILimited.js"></script>
+    <script src="activateDropDown.js"></script>
+    <script src="main.js"></script>
 </head>
 <body>
 
@@ -36,18 +42,7 @@
                 <input name="Auto" type="hidden">
                 <i class="dropdown icon"></i>
                 <div class="default text">Auto</div>
-                <div class="menu">
-                    <div class="item" data-value="127">63.5℃</div>
-                    <div class="item" data-value="126">63.0℃</div>
-                    <div class="item" data-value="125">62.5℃</div>
-                    <div class="item" data-value="124">62.0℃</div>
-                    <div class="item" data-value="123">61.5℃</div>
-                    <div class="item" data-value="122">61.0℃</div>
-                    <div class="item" data-value="121">60.5℃</div>
-                    <div class="item" data-value="120">60.0℃</div>
-                    <div class="item" data-value="119">59.5℃</div>
-                    <div class="item" data-value="118">59.0℃</div>
-                </div>
+                <div class="menu"></div>
             </div>
         </div>
         <div class="item">
@@ -55,10 +50,7 @@
                 <input name="Cool" type="hidden">
                 <i class="dropdown icon"></i>
                 <div class="default text">Cool</div>
-                <div class="menu">
-                    <div class="item" data-value="127">63.5℃</div>
-                    <div class="item" data-value="126">63.0℃</div>
-                </div>
+                <div class="menu"></div>
             </div>
         </div>
         <div class="item">
@@ -66,10 +58,7 @@
                 <input name="Heat" type="hidden">
                 <i class="dropdown icon"></i>
                 <div class="default text">Heat</div>
-                <div class="menu">
-                    <div class="item" data-value="127">63.5℃</div>
-                    <div class="item" data-value="126">63.0℃</div>
-                </div>
+                <div class="menu"></div>
             </div>
         </div>
         <div class="item">
@@ -84,11 +73,8 @@
             <div class="ui selection dropdown" id="cautoheat">
                 <input name="C.Auto.Cool" type="hidden">
                 <i class="dropdown icon"></i>
-                <div class="default text">C.Auto.Cool</div>
-                <div class="menu">
-                    <div class="item" data-value="127">63.5℃</div>
-                    <div class="item" data-value="126">63.0℃</div>
-                </div>
+                <div class="default text">C.Auto.Heat</div>
+                <div class="menu"></div>
             </div>
         </div>
     </div>
@@ -108,6 +94,7 @@
     $('#auto,#heat,#cool,#cautoheat')
         .dropdown()
     ;
+    main();
 </script>
 </body>
 </html>

@@ -1,11 +1,11 @@
 /**
  * 設定温度テーブル
  */
-var tempTable = [
+let tempTable = [
     '0.0', '0.5', '1.0', '1.5', '2.0',
-    '2.5', ' 3.0', '3.5', '4.0', '4.5',
-    '5.0', ' 5.5', '6.0', '6.5', '7.0',
-    '7.5', ' 8.0', '8.5', '9.0', '9.5',
+    '2.5', '3.0', '3.5', '4.0', '4.5',
+    '5.0', '5.5', '6.0', '6.5', '7.0',
+    '7.5', '8.0', '8.5', '9.0', '9.5',
     '10.0', '10.5', '11.0', '11.5', '12.0',
     '12.5', '13.0', '13.5', '14.0', '14.5',
     '15.0', '15.5', '16.0', '16.5', '17.0',
@@ -33,11 +33,10 @@ var tempTable = [
 /**
  * 設定温度上下限データ
  */
-var TempData = /** @class */ (function () {
-    function TempData(name, // 表示温度
-        value) {
-        this.name = name;
-        this.value = value;
+let TempData = /** @class */ (function () {
+    function TempData(name, value) {
+        this.name = name;     // 表示温度
+        this.value = value;   // 内部値
     }
     return TempData;
 }());
@@ -45,11 +44,11 @@ var TempData = /** @class */ (function () {
 /**
  * 設定温度上下限リスト
  */
-var TempRange = /** @class */ (function () {
+let TempRange = /** @class */ (function () {
     function TempRange(min, max) {
         this.tempList = [];
         // 温度リストを作成
-        for (var i = min, j = 0; i <= max; i++) {
+        for (let i = min, j = 0; i <= max; i++) {
             this.tempList[j++] = new TempData(tempTable[i] + '℃', i);
         }
 

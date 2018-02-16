@@ -80,20 +80,8 @@
     </div>
 </div>
 
-<!-- Dropdown有効化 -->
+<!-- アプリ入口 -->
 <script>
-    let selElm = $('#cautocool');
-    selElm
-        .dropdown('restore default text')
-    ;
-    selElm
-        .dropdown({
-            values: new TempRange(10, 60).tempList.reverse()
-        })
-    ;
-    $('#auto,#heat,#cool,#cautoheat')
-        .dropdown()
-    ;
     main();
 </script>
 </body>

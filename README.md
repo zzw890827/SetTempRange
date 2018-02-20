@@ -4,10 +4,10 @@
 * 簡易静的サーバanywhereを推奨する
   * Nodeをインストール
   * 下記のコマンドを実行<br>
-       <b>`node -g install anywhere`</b>
+    <b>`node -g install anywhere`</b>
   * SetTempRangeの配下に下記のコマンドを実行<br>
-  　  <b>`anywhere 8810`</b>
+  　<b>`anywhere 8810`</b>
   * Chromeを開いて、下記のURLにアクセスをする<br>
-      <href>`localhost:8810`</b>
+    <href>`localhost:8810`</b>
   * <b>※IEにサポートされてない要素(let)を使っているため、IEにての動作確認することができない。
  ### tpcdataの配下は選択しRCGデータである、要するにselRxxのことである。

@@ -19,7 +19,7 @@
 
 
 /**
- * アプリを稼働
+ * アプリメーンモジュール
  * @module main
  *
  */
@@ -29,7 +29,18 @@ function main() {
     var drpDnIdTbl = [
         '#auto', '#cool', '#heat', '#cautocool', '#cautoheat'
     ];
+    var funLabIdTbl = [
+        '#funLabAuto',
+        '#funLabCool',
+        '#funLabHeat',
+        '#funLabCCool',
+        '#funLabCHeat',
+    ];
     for (var i = 0; i < drpDnIdTbl.length; i++) {
         activateDropDown(tmpLmtTbl[i][0], tmpLmtTbl[i][1], drpDnIdTbl[i]);
+        ctlFunLabel(tmpLmtTbl[i][2], funLabIdTbl[i]);
+        if (tmpLmtTbl[i][2] === 0) {
+            unactivateDropDown(drpDnIdTbl[i]);
+        }
     }
 }

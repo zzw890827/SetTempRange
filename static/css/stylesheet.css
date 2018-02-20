@@ -13,3 +13,9 @@
 .ui.items > .item > .content > .header {
     padding-top: 1em;
 }
+
+.ui.label {
+    line-height: initial;
+    font-size: initial;
+    display: none;
+}

@@ -38,6 +38,7 @@ let TempData = /** @class */ (function () {
         this.name = name;     // 表示温度
         this.value = value;   // 内部値
     }
+
     return TempData;
 }());
 
@@ -48,10 +49,12 @@ let TempRange = /** @class */ (function () {
     function TempRange(min, max) {
         this.tempList = [];
         // 温度リストを作成
-        for (let i = min, j = 0; i <= max; i++) {
-            this.tempList[j++] = new TempData(tempTable[i] + '℃', i);
+        if (min >= 0 && min <= 127) {
+            for (let i = min, j = 0; i <= max; i++) {
+                this.tempList[j++] = new TempData(tempTable[i] + '℃', i);
+            }
         }
-
     }
+
     return TempRange;
 }());

@@ -12,7 +12,7 @@
  *********************************************************/
 function setTempUILimited() {
     // データを読み込み、処理用配列を作成
-    var path = 'tpcdata/case01/';　// Pathを変更することでテストを替える
+    var path = 'tpcdata/case03/';　// Pathを変更することでテストを替える
     var rcgGr = new SelRCG(path);
     // TODO 上下限を算出
     return calTmpLmt(
@@ -58,7 +58,7 @@ function calTmpLmt(selR02, selR03, selR15) {
         tmpLmtTbl[4][1] = tunedTmp[1];
     }
     // 動的温度範囲を取得
-    //localGetDynTempMinMax();
+    //localGetDymTempMinMax();
     // 静的範囲と動的範囲And取り
     // localGetStaAndDynTmp()
 
@@ -70,33 +70,33 @@ function calTmpLmt(selR02, selR03, selR15) {
         for (var i = 0; i < selR03.length; i++) {
             if (parseInt(selR03[i][18]) === 1 &&   // Auto：機能あり且冷暖別なし
                 parseInt(selR03[i][81]) === 0) {
-                tmpLmtTbl[0][0] = localGetMax(      // Auto下限値
+                tmpLmtTbl[0][0] = Math.max(      // Auto下限値
                     tmpLmtTbl[0][0],
                     parseFloat(selR03[i][37]) * 2
                 );
-                tmpLmtTbl[0][1] = localGetMin(    // Auto上限値
+                tmpLmtTbl[0][1] = Math.min(    // Auto上限値
                     tmpLmtTbl[0][1],
                     parseFloat(selR03[i][38]) * 2
                 );
                 tmpLmtTbl[0][2] = 1;  //　機能フラグ：ありにする
             } else if (parseInt(selR03[i][81]) === 1) { //　冷暖別あり
-                tmpLmtTbl[3][0] = localGetMax(   // 冷暖別Cool下限値
+                tmpLmtTbl[3][0] = Math.max(   // 冷暖別Cool下限値
                     tmpLmtTbl[3][0],
                     parseFloat(selR03[i][41]) * 2
                 );
-                tmpLmtTbl[3][1] = localGetMin(  // 冷暖別Cool上限値
+                tmpLmtTbl[3][1] = Math.min(  // 冷暖別Cool上限値
                     tmpLmtTbl[3][1],
                     parseFloat(selR03[i][42]) * 2
                 );
-                tmpLmtTbl[4][0] = localGetMax(   // 冷暖別Heat下限値
+                tmpLmtTbl[4][0] = Math.max(   // 冷暖別Heat下限値
                     tmpLmtTbl[4][0],
                     parseFloat(selR03[i][39]) * 2
                 );
-                tmpLmtTbl[4][1] = localGetMin(   // 冷暖別Heat上限値
+                tmpLmtTbl[4][1] = Math.min(   // 冷暖別Heat上限値
                     tmpLmtTbl[4][1],
                     parseFloat(selR03[i][40]) * 2
                 );
-                deadBand = localGetMax(  // デッドバンド
+                deadBand = Math.max(  // デッドバンド
                     deadBand,
                     parseFloat(selR03[i][82]) * 2
                 );
@@ -105,11 +105,11 @@ function calTmpLmt(selR02, selR03, selR15) {
             }
             // 暖房：機能あり
             if (parseInt(selR03[i][19]) === 1) {
-                tmpLmtTbl[1][0] = localGetMax(   // Heat下限値
+                tmpLmtTbl[1][0] = Math.max(   // Heat下限値
                     tmpLmtTbl[1][0],
                     parseFloat(selR03[i][39]) * 2
                 );
-                tmpLmtTbl[1][1] = localGetMin(  // Heat上限値
+                tmpLmtTbl[1][1] = Math.min(  // Heat上限値
                     tmpLmtTbl[1][1],
                     parseFloat(selR03[i][40]) * 2
                 );
@@ -117,30 +117,16 @@ function calTmpLmt(selR02, selR03, selR15) {
             }
             // 冷房：機能あり
             if (parseInt(selR03[i][20]) === 1) {
-                tmpLmtTbl[2][0] = localGetMax(   // Cool下限値
+                tmpLmtTbl[2][0] = Math.max(   // Cool下限値
                     tmpLmtTbl[2][0],
                     parseFloat(selR03[i][41]) * 2
                 );
-                tmpLmtTbl[2][1] = localGetMin(  // Cool上限値
+                tmpLmtTbl[2][1] = Math.min(  // Cool上限値
                     tmpLmtTbl[2][1],
                     parseFloat(selR03[i][42]) * 2
                 );
                 tmpLmtTbl[2][2] = 1;  //　機能フラグ：ありにする
             }
-        }
-
-        /********************************************************
-         * localGetMax(a, b) aとbの大きい方を取得
-         ********************************************************/
-        function localGetMax(a, b) {
-            return a > b ? a : b;
-        }
-
-        /********************************************************
-         * localGetMax(a, b) aとbの小さい方を取得
-         ********************************************************/
-        function localGetMin(a, b) {
-            return a < b ? a : b;
         }
     }
 

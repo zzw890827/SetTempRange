@@ -19,7 +19,7 @@ function readLocalFile(aryData, path) {
         async: false,   // 同期
         success: function (data) {
             // CSVデータを二次元配列に格納
-            (new CSV(data)).forEach(e => {
+            (CSV.parse(data)).forEach(e => {
                 aryData.push(e);
             });
         },

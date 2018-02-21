@@ -18,8 +18,7 @@ function setTempUILimited() {
     return calTmpLmt(
         rcgGr.selR02,  // モニター情報
         rcgGr.selR03,  // 静的情報
-        rcgGr.selR15)  // 動的温度情報
-    ;
+        rcgGr.selR15); // 動的温度情報
 }
 
 /***********************************************************
@@ -39,9 +38,9 @@ function setTempUILimited() {
 function calTmpLmt(selR02, selR03, selR15) {
     // 出力用テーブルを初期化
     var tmpLmtTbl = [
-        [0, 127, 1],   // Auto
-        [0, 127, 1],   // Cool
-        [0, 127, 1],   // Heat
+        [0, 127, 0],   // Auto
+        [0, 127, 0],   // Cool
+        [0, 127, 0],   // Heat
         [0, 127, 0],   // C.Auto.Cool
         [0, 127, 0]    // C.Auto.Heat
     ];
@@ -92,16 +91,19 @@ function calTmpLmt(selR02, selR03, selR15) {
         if (lowLmtAuto.length !== 0) {
             tmpLmtTbl[0][0] = Math.max.apply(null, lowLmtAuto);
             tmpLmtTbl[0][1] = Math.min.apply(null, upLmtAuto);
+            tmpLmtTbl[0][2] = 1; //機能あり
         }
         // Cool
-        if (lowLmtAuto.length !== 0) {
+        if (lowLmtCool.length !== 0) {
             tmpLmtTbl[1][0] = Math.max.apply(null, lowLmtCool);
             tmpLmtTbl[1][1] = Math.min.apply(null, upLmtCool);
+            tmpLmtTbl[1][2] = 1; //機能あり
         }
         // Heat
-        if (lowLmtAuto.length !== 0) {
+        if (lowLmtHeat.length !== 0) {
             tmpLmtTbl[2][0] = Math.max.apply(null, lowLmtHeat);
             tmpLmtTbl[2][1] = Math.min.apply(null, upLmtHeat);
+            tmpLmtTbl[2][2] = 1; //機能あり
         }
     }
 

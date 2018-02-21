@@ -13,7 +13,7 @@
 *
 * Include Semantic UI - 2.2.14 (http://www.semantic-ui.com/)
 * Include jQuery v3.3.1 (https://jquery.com/)
-* Include CSV.js v3.3.6 (https://github.com/knrz/CSV.js)
+* Include CSV-JS v1.1.1 (https://github.com/gkindel/CSV-JS)
 *
 */
 

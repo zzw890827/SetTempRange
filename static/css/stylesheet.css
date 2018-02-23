@@ -19,3 +19,7 @@
     font-size: initial;
     display: none;
 }
+
+.ui.grid {
+    padding-top: 1em;
+}

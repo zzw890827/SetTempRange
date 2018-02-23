@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>設定温度上下限UI制限</title>
-    <base href="/">
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="assets/semantic.min.css"/>
+    <link rel="stylesheet" href="static/vendor/semantic.min.css"/>
     <link rel="stylesheet" type="text/css" href="static/css/stylesheet.css">
-    <script src="assets/jquery-3.3.1.min.js"></script>
-    <script src="assets/semantic.min.js"></script>
+    <script src="static/vendor/jquery-3.3.1.min.js"></script>
+    <script src="static/vendor/semantic.min.js"></script>
     <script src="static/js/tempList.js"></script>
     <script src="static/js/ajax.js"></script>
-    <script src="assets/csv.js"></script>
+    <script src="static/vendor/csv.js"></script>
     <script src="static/js/selRCG.js"></script>
     <script src="static/js/setTempUILimited.js"></script>
     <script src="static/js/control.js"></script>
     <script src="static/js/main.js"></script>
+    <script src="static/vendor/angular.min.js"></script>
 </head>
 <body>
 
@@ -24,7 +24,7 @@
 <div class="ui menu">
     <div class="ui container">
         <a class="header item">
-            <img class="logo" src="assets/images/airstage.png">
+            <img class="logo" src="static/images/airstage.png">
         </a>
         <div class="header item borderless">
             <h1 class="ui header">
@@ -35,62 +35,149 @@
 </div>
 
 <!-- 温度上下限領域 -->
-<div class="ui main text container">
-    <div class="ui divided items">
-        <div class="item">
-            <div class="ui selection dropdown" id="auto">
-                <input name="Auto" type="hidden">
-                <i class="dropdown icon"></i>
-                <div class="default text">Auto</div>
-                <div class="menu"></div>
-            </div>
-            <div class="ui left pointing red basic label" id="funLabAuto">
-                機能無し
+<div class="ui main container">
+    <div class="ui grid">
+        <div class="four wide columnl">
+            <div class="ui divided items center aligned">
+                <div class="item">
+                    <div class="ui selection dropdown" id="auto">
+                        <input name="Auto" type="hidden">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">Auto</div>
+                        <div class="menu"></div>
+                    </div>
+                    <div class="ui left pointing red basic label"
+                         id="funLabAuto">
+                        機能無し
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="ui selection dropdown" id="cool">
+                        <input name="Cool" type="hidden">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">Cool</div>
+                        <div class="menu"></div>
+                    </div>
+                    <div class="ui left pointing red basic label"
+                         id="funLabCool">
+                        機能無し
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="ui selection dropdown" id="heat">
+                        <input name="Heat" type="hidden">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">Heat</div>
+                        <div class="menu"></div>
+                    </div>
+                    <div class="ui left pointing red basic label"
+                         id="funLabHeat">
+                        機能無し
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="ui selection dropdown" id="cautocool">
+                        <input name="C.Auto.Cool" type="hidden">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">C.Auto.Cool</div>
+                        <div class="menu"></div>
+                    </div>
+                    <div class="ui left pointing red basic label"
+                         id="funLabCCool">
+                        機能無し
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="ui selection dropdown" id="cautoheat">
+                        <input name="C.Auto.Cool" type="hidden">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">C.Auto.Heat</div>
+                        <div class="menu"></div>
+                    </div>
+                    <div class="ui left pointing red basic label"
+                         id="funLabCHeat">
+                        機能無し
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="item">
-            <div class="ui selection dropdown" id="cool">
-                <input name="Cool" type="hidden">
-                <i class="dropdown icon"></i>
-                <div class="default text">Cool</div>
-                <div class="menu"></div>
-            </div>
-            <div class="ui left pointing red basic label" id="funLabCool">
-                機能無し
-            </div>
-        </div>
-        <div class="item">
-            <div class="ui selection dropdown" id="heat">
-                <input name="Heat" type="hidden">
-                <i class="dropdown icon"></i>
-                <div class="default text">Heat</div>
-                <div class="menu"></div>
-            </div>
-            <div class="ui left pointing red basic label" id="funLabHeat">
-                機能無し
-            </div>
-        </div>
-        <div class="item">
-            <div class="ui selection dropdown" id="cautocool">
-                <input name="C.Auto.Cool" type="hidden">
-                <i class="dropdown icon"></i>
-                <div class="default text">C.Auto.Cool</div>
-                <div class="menu"></div>
-            </div>
-            <div class="ui left pointing red basic label" id="funLabCCool">
-                機能無し
-            </div>
-        </div>
-        <div class="item">
-            <div class="ui selection dropdown" id="cautoheat">
-                <input name="C.Auto.Cool" type="hidden">
-                <i class="dropdown icon"></i>
-                <div class="default text">C.Auto.Heat</div>
-                <div class="menu"></div>
-            </div>
-            <div class="ui left pointing red basic label" id="funLabCHeat">
-                機能無し
-            </div>
+        <div class="sixteen wide column">
+            <h4 class="ui horizontal divider header">
+                <i class="tag icon"></i>
+                詳細
+            </h4>
+            <p>試験データは下記の通りです。</p>
+            <h4 class="ui horizontal divider header">
+                <i class="bar chart icon"></i>
+                静的情報
+            </h4>
+            <table class="ui celled structured table">
+                <thead>
+                <tr>
+                    <th rowspan="3">RCG ID</th>
+                    <th rowspan="3">運転モード</th>
+                    <th class="center aligned" colspan="4">機能情報</th>
+                    <th class="center aligned" colspan="6">静的温度範囲</th>
+                </tr>
+                <tr>
+                    <th rowspan="2" class="center aligned">Auto</th>
+                    <th rowspan="2" class="center aligned">C.Auto</th>
+                    <th rowspan="2" class="center aligned">Cool</th>
+                    <th rowspan="2" class="center aligned">Heat</th>
+                    <th class="center aligned" colspan="2">Auto</th>
+                    <th class="center aligned" colspan="2">Cool</th>
+                    <th class="center aligned" colspan="2">Heat</th>
+                </tr>
+                <tr>
+                    <th class="center aligned">下限</th>
+                    <th class="center aligned">上限</th>
+                    <th class="center aligned">下限</th>
+                    <th class="center aligned">上限</th>
+                    <th class="center aligned">下限</th>
+                    <th class="center aligned">上限</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Alpha Team</td>
+                    <td>Project 1</td>
+                    <td class="right aligned">2</td>
+                    <td class="center aligned">
+                        <i class="large green checkmark icon"></i>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td rowspan="3">Beta Team</td>
+                    <td>Project 1</td>
+                    <td class="right aligned">52</td>
+                    <td class="center aligned">
+                        <i class="large green checkmark icon"></i>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Project 2</td>
+                    <td class="right aligned">12</td>
+                    <td></td>
+                    <td class="center aligned">
+                        <i class="large green checkmark icon"></i>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Project 3</td>
+                    <td class="right aligned">21</td>
+                    <td class="center aligned">
+                        <i class="large green checkmark icon"></i>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

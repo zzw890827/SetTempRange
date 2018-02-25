@@ -1,3 +1,23 @@
+/*
+* # Remote Touch Panel Controller
+*
+* http://www.fujitsu-general.com/jp/
+*
+* waterfall -v4.0 (2018-02-16T16:37:41+0900)
+*
+* Copyright 2018 FUJITSU GENERAL LIMITED.
+*
+* Released under the MIT license
+*
+* http://opensource.org/licenses/MIT
+*
+* Include Semantic UI - 2.2.14 (http://www.semantic-ui.com/)
+* Include jQuery v3.3.1 (https://jquery.com/)
+* Include CSV-JS v1.1.1 (https://github.com/gkindel/CSV-JS)
+* Include AngularJS v1.6.9 (https://angularjs.org)
+*
+*/
+
 /**
  * 静的情報クラス
  * <p>

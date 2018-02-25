@@ -206,7 +206,7 @@
     </div>
 </div>
 
-<!-- アプリ入口 -->
+<!-- アプリ -->
 <script>
     //main();
     var myApp = angular.module('myApp', []);
@@ -224,7 +224,7 @@
             $scope.tblDataR03 = [];
             selR03.forEach(value => {
                 $scope.tblDataR03.push(new R03(value));
-            })
+            });
         }).then(function () { // DropDownを作成
             setDropDown(calTmpLmt(selR02, selR03, selR15));
         });

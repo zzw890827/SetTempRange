@@ -1,6 +1,31 @@
 /**
- * 設定温度テーブル
+ * 静的情報クラス
+ * <p>
+ *     R03の情報
+ * </p>
+ * @class R03
  */
+let R03;
+
+R03 = (function () {
+    function R03(arr) {
+        this.rcgID = arr[0];
+        this.hasAuto = arr[18] === 1 && arr[81] !== 1;
+        this.hasCAuto = arr[81] === 1;
+        this.hasCool = arr[20] === 1;
+        this.hasHeat = arr[19] === 1;
+        this.lowLmtAuto = (arr[18] === 1 && arr[81] !== 1) ? arr[37] : -1;
+        this.upLmtAuto = (arr[18] === 1 && arr[81] !== 1) ? arr[38] : -1;
+        this.lowLmtCool = arr[20] === 1 ? arr[41] : -1;
+        this.upLmtCool = arr[20] === 1 ? arr[42] : -1;
+        this.lowLmtHeat = arr[19] === 1 ? arr[39] : -1;
+        this.upLmtHeat = arr[19] === 1 ? arr[40] : -1;
+        this.deadBand = arr[81] === 1 ? arr[82] : -1;
+    }
+
+    return R03;
+}());
+
 let tempTable = [
     '0.0', '0.5', '1.0', '1.5', '2.0',
     '2.5', '3.0', '3.5', '4.0', '4.5',

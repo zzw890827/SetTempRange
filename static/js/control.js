@@ -1,3 +1,24 @@
+/*
+* # Remote Touch Panel Controller
+*
+* http://www.fujitsu-general.com/jp/
+*
+* waterfall -v4.0 (2018-02-16T16:37:41+0900)
+*
+* Copyright 2018 FUJITSU GENERAL LIMITED.
+*
+* Released under the MIT license
+*
+* http://opensource.org/licenses/MIT
+*
+* Include Semantic UI - 2.2.14 (http://www.semantic-ui.com/)
+* Include jQuery v3.3.1 (https://jquery.com/)
+* Include CSV-JS v1.1.1 (https://github.com/gkindel/CSV-JS)
+* Include AngularJS v1.6.9 (https://angularjs.org)
+*
+*/
+
+
 /**
  * DropDownListを活性化
  * @module activateDropDown
@@ -8,7 +29,7 @@
  *
  */
 function activateDropDown(min, max, elemID) {
-    let selElm = $(elemID);
+    let selElm = angular.element(document.getElementById(elemID));
     selElm
         .dropdown('restore default text')
     ;
@@ -26,7 +47,7 @@ function activateDropDown(min, max, elemID) {
  *
  */
 function unactivateDropDown(elemID) {
-    let selElm = $(elemID);
+    let selElm = angular.element(document.getElementById(elemID));
     selElm
         .addClass('disabled')
     ;
@@ -41,10 +62,38 @@ function unactivateDropDown(elemID) {
  *
  */
 function ctlFunLabel(flg, elemID) {
-    let selElm = $(elemID);
+    let selElm = angular.element(document.getElementById(elemID));
     if (flg === 1) {
         selElm.hide();
     } else if (flg === 0) {
         selElm.show();
+    }
+}
+
+/**
+ * DropDown及びラベル描画
+ * @module setDropDown
+ * @param {Array<Array>} tmpLmtTbl 温度上下限テーブル
+ *
+ */
+
+function setDropDown(tmpLmtTbl) {
+    // 温度上下限を読み込む
+    var drpDnIdTbl = [
+        'auto', 'cool', 'heat', 'cautocool', 'cautoheat'
+    ];
+    var funLabIdTbl = [
+        'funLabAuto',
+        'funLabCool',
+        'funLabHeat',
+        'funLabCCool',
+        'funLabCHeat',
+    ];
+    for (var i = 0; i < drpDnIdTbl.length; i++) {
+        activateDropDown(tmpLmtTbl[i][0], tmpLmtTbl[i][1], drpDnIdTbl[i]);
+        ctlFunLabel(tmpLmtTbl[i][2], funLabIdTbl[i]);
+        if (tmpLmtTbl[i][2] === 0) {
+            unactivateDropDown(drpDnIdTbl[i]);
+        }
     }
 }

@@ -6,16 +6,13 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="static/vendor/semantic.min.css"/>
-    <link rel="stylesheet" type="text/css" href="static/css/stylesheet.css">
+    <link rel="stylesheet" href="static/css/stylesheet.css">
     <script src="static/vendor/jquery-3.3.1.min.js"></script>
     <script src="static/vendor/semantic.min.js"></script>
-    <script src="static/js/tempList.js"></script>
-    <script src="static/js/ajax.js"></script>
     <script src="static/vendor/csv.js"></script>
-    <script src="static/js/selRCG.js"></script>
     <script src="static/js/setTempUILimited.js"></script>
     <script src="static/js/control.js"></script>
-    <script src="static/js/main.js"></script>
+    <script src="static/js/model.js"></script>
     <script src="static/vendor/angular.min.js"></script>
 </head>
 <body>
@@ -36,7 +33,7 @@
 </div>
 
 <!-- 温度上下限領域 -->
-<div class="ui main container">
+<div ng-app="myApp" class="ui main container">
     <div class="ui grid">
         <div class="four wide columnl">
             <div class="ui divided items center aligned">
@@ -102,6 +99,7 @@
                 </div>
             </div>
         </div>
+        <!-- 詳細領域 -->
         <div class="sixteen wide column">
             <h4 class="ui horizontal divider header">
                 <i class="tag icon"></i>
@@ -109,16 +107,15 @@
             </h4>
             <p>試験データは下記の通りです。</p>
             <h4 class="ui horizontal divider header">
-                <i class="bar chart icon"></i>
+                <i class="bar table icon"></i>
                 静的情報
             </h4>
-            <table class="ui celled structured table">
+            <table class="ui celled structured table" ng-controller="stsTblCtl">
                 <thead>
                 <tr>
-                    <th rowspan="3">RCG ID</th>
-                    <th rowspan="3">運転モード</th>
+                    <th class="center aligned" rowspan="3">RCG ID</th>
                     <th class="center aligned" colspan="4">機能情報</th>
-                    <th class="center aligned" colspan="6">静的温度範囲</th>
+                    <th class="center aligned" colspan="7">静的温度範囲</th>
                 </tr>
                 <tr>
                     <th rowspan="2" class="center aligned">Auto</th>
@@ -128,6 +125,7 @@
                     <th class="center aligned" colspan="2">Auto</th>
                     <th class="center aligned" colspan="2">Cool</th>
                     <th class="center aligned" colspan="2">Heat</th>
+                    <th rowspan="2" class="center aligned">Dead Band</th>
                 </tr>
                 <tr>
                     <th class="center aligned">下限</th>
@@ -139,43 +137,68 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>Alpha Team</td>
-                    <td>Project 1</td>
-                    <td class="right aligned">2</td>
+                <!-- AngularJS部品：動的表を作成 -->
+                <tr ng-repeat="row in tblDataR03 track by $index">
+                    <td class="center aligned">{{row.rcgID}}</td>
                     <td class="center aligned">
-                        <i class="large green checkmark icon"></i>
+                        <div ng-if="row.hasAuto==true"><i
+                                class="large green checkmark icon"></i></div>
+                        <div ng-if="row.hasAuto==false"><i
+                                class="large red minus icon"></i></div>
                     </td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td rowspan="3">Beta Team</td>
-                    <td>Project 1</td>
-                    <td class="right aligned">52</td>
                     <td class="center aligned">
-                        <i class="large green checkmark icon"></i>
+                        <div ng-if="row.hasCAuto==true"><i
+                                class="large green checkmark icon"></i></div>
+                        <div ng-if="row.hasCAuto==false"><i
+                                class="large red minus icon"></i></div>
                     </td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Project 2</td>
-                    <td class="right aligned">12</td>
-                    <td></td>
                     <td class="center aligned">
-                        <i class="large green checkmark icon"></i>
+                        <div ng-if="row.hasCool==true"><i
+                                class="large green checkmark icon"></i></div>
+                        <div ng-if="row.hasCool==false"><i
+                                class="large red minus icon"></i></div>
                     </td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Project 3</td>
-                    <td class="right aligned">21</td>
                     <td class="center aligned">
-                        <i class="large green checkmark icon"></i>
+                        <div ng-if="row.hasCool==true"><i
+                                class="large green checkmark icon"></i></div>
+                        <div ng-if="row.hasCool==false"><i
+                                class="large red minus icon"></i></div>
                     </td>
-                    <td></td>
-                    <td></td>
+                    <td class="center aligned">
+                        <div ng-if="row.lowLmtAuto==-1"><i
+                                class="large red minus icon"></i></div>
+                        <div ng-if="row.lowLmtAuto!=-1">{{row.lowLmtAuto}}</div>
+                    </td>
+                    <td class="center aligned">
+                        <div ng-if="row.upLmtAuto==-1"><i
+                                class="large red minus icon"></i></div>
+                        <div ng-if="row.lowLmtAuto!=-1">{{row.upLmtAuto}}</div>
+                    </td>
+                    <td class="center aligned">
+                        <div ng-if="row.lowLmtCool==-1"><i
+                                class="large red minus icon"></i></div>
+                        <div ng-if="row.lowLmtCool!=-1">{{row.lowLmtCool}}</div>
+                    </td>
+                    <td class="center aligned">
+                        <div ng-if="row.upLmtCool==-1"><i
+                                class="large red minus icon"></i></div>
+                        <div ng-if="row.upLmtCool!=-1">{{row.upLmtCool}}</div>
+                    </td>
+                    <td class="center aligned">
+                        <div ng-if="row.lowLmtHeat==-1"><i
+                                class="large red minus icon"></i></div>
+                        <div ng-if="row.lowLmtHeat!=-1">{{row.lowLmtHeat}}</div>
+                    </td>
+                    <td class="center aligned">
+                        <div ng-if="row.upLmtHeat==-1"><i
+                                class="large red minus icon"></i></div>
+                        <div ng-if="row.upLmtHeat!=-1">{{row.upLmtHeat}}</div>
+                    </td>
+                    <td class="center aligned">
+                        <div ng-if="row.deadBand==-1"><i
+                                class="large red minus icon"></i></div>
+                        <div ng-if="row.deadBand!=-1">{{row.deadBand}}</div>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -185,7 +208,27 @@
 
 <!-- アプリ入口 -->
 <script>
-    main();
+    //main();
+    var myApp = angular.module('myApp', []);
+    myApp.controller('stsTblCtl', function ($scope, $q, $http) {
+        $q.all({  // ローカルファイル読み込む
+            selR02: $http.get(`${dataRoot}R02monUnit.csv`),
+            selR03: $http.get(`${dataRoot}R03infUnit.csv`),
+            selR15: $http.get(`${dataRoot}R15tempSet.csv`)
+        }).then(arr => {  // データ格納
+            // csv -> Array
+            selR02 = CSV.parse(arr.selR02.data);
+            selR03 = CSV.parse(arr.selR03.data);
+            selR15 = CSV.parse(arr.selR15.data);
+            // 表データ作成
+            $scope.tblDataR03 = [];
+            selR03.forEach(value => {
+                $scope.tblDataR03.push(new R03(value));
+            })
+        }).then(function () { // DropDownを作成
+            setDropDown(calTmpLmt(selR02, selR03, selR15));
+        });
+    });
 </script>
 </body>
 </html>

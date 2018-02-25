@@ -1,25 +1,4 @@
-/********************************************************
- * 設定温度UI制限
- * <p>
- *     1. データを読み込み、処理用配列を作成
- *     2. TODO 上下限を算出
- * </p>
- * @module  setTempUILimited
- * @author  ZHAO Zhongwen 201/02/16
- * @version 1.0
- * @since   4.0
- * @return {Array<Array>} tmpLmtTbl  温度上下限テーブル(0~127)
- *********************************************************/
-function setTempUILimited() {
-    // データを読み込み、処理用配列を作成
-    var path = 'tpcdata/case03/';　// Pathを変更することでテストを替える
-    var rcgGr = new SelRCG(path);
-    // TODO 上下限を算出
-    return calTmpLmt(
-        rcgGr.selR02,  // モニター情報
-        rcgGr.selR03,  // 静的情報
-        rcgGr.selR15); // 動的温度情報
-}
+var dataRoot = 'tpcdata/case03/'
 
 /***********************************************************
  * 温度上下限を算出
@@ -105,27 +84,27 @@ function calTmpLmt(selR02, selR03, selR15) {
             }
             // 暖房：機能あり
             if (parseInt(selR03[i][19]) === 1) {
-                tmpLmtTbl[1][0] = Math.max(   // Heat下限値
+                tmpLmtTbl[2][0] = Math.max(   // Heat下限値
                     tmpLmtTbl[1][0],
                     parseFloat(selR03[i][39]) * 2
                 );
-                tmpLmtTbl[1][1] = Math.min(  // Heat上限値
+                tmpLmtTbl[2][1] = Math.min(  // Heat上限値
                     tmpLmtTbl[1][1],
                     parseFloat(selR03[i][40]) * 2
                 );
-                tmpLmtTbl[1][2] = 1;  //　機能フラグ：ありにする
+                tmpLmtTbl[2][2] = 1;  //　機能フラグ：ありにする
             }
             // 冷房：機能あり
             if (parseInt(selR03[i][20]) === 1) {
-                tmpLmtTbl[2][0] = Math.max(   // Cool下限値
+                tmpLmtTbl[1][0] = Math.max(   // Cool下限値
                     tmpLmtTbl[2][0],
                     parseFloat(selR03[i][41]) * 2
                 );
-                tmpLmtTbl[2][1] = Math.min(  // Cool上限値
-                    tmpLmtTbl[2][1],
+                tmpLmtTbl[1][1] = Math.min(  // Cool上限値
+                    tmpLmtTbl[1][1],
                     parseFloat(selR03[i][42]) * 2
                 );
-                tmpLmtTbl[2][2] = 1;  //　機能フラグ：ありにする
+                tmpLmtTbl[1][2] = 1;  //　機能フラグ：ありにする
             }
         }
     }

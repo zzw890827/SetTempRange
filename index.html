@@ -100,7 +100,7 @@
             </div>
         </div>
         <!-- 詳細領域 -->
-        <div class="sixteen wide column">
+        <div class="sixteen wide column" ng-controller="stsTblCtl">
             <h4 class="ui horizontal divider header">
                 <i class="tag icon"></i>
                 詳細
@@ -110,7 +110,7 @@
                 <i class="bar table icon"></i>
                 静的情報
             </h4>
-            <table class="ui celled structured table" ng-controller="stsTblCtl">
+            <table class="ui celled structured table">
                 <thead>
                 <tr>
                     <th class="center aligned" rowspan="3">RCG ID</th>
@@ -137,8 +137,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                <!-- AngularJS部品：動的表を作成 -->
-                <tr ng-repeat="row in tblDataR03 track by $index">
+                <!-- AngularJS部品：性的情報表を作成 -->
+                <tr ng-repeat="row in staticTbl">
                     <td class="center aligned">{{row.rcgID}}</td>
                     <td class="center aligned">
                         <div ng-if="row.hasAuto==true"><i
@@ -227,6 +227,41 @@
                     <th class="center aligned">上限</th>
                 </tr>
                 </thead>
+                <!-- AngularJS部品：動的情報表を作成 -->
+                <tr ng-repeat="row in dynamicTbl">
+                    <td class="center aligned">{{row.rcgID}}</td>
+                    <td class="center aligned">{{row.mode}}</td>
+                    <td class="center aligned">
+                        <div ng-if="row.lowLmtAuto==-1"><i
+                                class="large red minus icon"></i></div>
+                        <div ng-if="row.lowLmtAuto!=-1">{{row.lowLmtAuto}}</div>
+                    </td>
+                    <td class="center aligned">
+                        <div ng-if="row.upLmtAuto==-1"><i
+                                class="large red minus icon"></i></div>
+                        <div ng-if="row.lowLmtAuto!=-1">{{row.upLmtAuto}}</div>
+                    </td>
+                    <td class="center aligned">
+                        <div ng-if="row.lowLmtCool==-1"><i
+                                class="large red minus icon"></i></div>
+                        <div ng-if="row.lowLmtCool!=-1">{{row.lowLmtCool}}</div>
+                    </td>
+                    <td class="center aligned">
+                        <div ng-if="row.upLmtCool==-1"><i
+                                class="large red minus icon"></i></div>
+                        <div ng-if="row.upLmtCool!=-1">{{row.upLmtCool}}</div>
+                    </td>
+                    <td class="center aligned">
+                        <div ng-if="row.lowLmtHeat==-1"><i
+                                class="large red minus icon"></i></div>
+                        <div ng-if="row.lowLmtHeat!=-1">{{row.lowLmtHeat}}</div>
+                    </td>
+                    <td class="center aligned">
+                        <div ng-if="row.upLmtHeat==-1"><i
+                                class="large red minus icon"></i></div>
+                        <div ng-if="row.upLmtHeat!=-1">{{row.upLmtHeat}}</div>
+                    </td>
+                </tr>
             </table>
         </div>
     </div>
@@ -247,10 +282,18 @@
             selR03 = CSV.parse(arr.selR03.data);
             selR15 = CSV.parse(arr.selR15.data);
             // 表データ作成
-            $scope.tblDataR03 = [];
+            $scope.staticTbl = [];
+            $scope.dynamicTbl = [];
             selR03.forEach(value => {
-                $scope.tblDataR03.push(new StaticInfo(value));
+                $scope.staticTbl.push(new StaticInfo(value));
             });
+            for (var i = 0; i < selR02.length; i++) {
+                $scope.dynamicTbl.push(new DynamicInfo(
+                    selR02[i],
+                    selR03[i],
+                    selR15[i]
+                ));
+            }
         }).then(function () { // DropDownを作成
             setDropDown(calTmpLmt(selR02, selR03, selR15));
         });

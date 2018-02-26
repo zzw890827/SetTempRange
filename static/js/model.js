@@ -69,10 +69,12 @@ var DynamicInfo = (function () {
      * @constructor
      */
     function DynamicInfo(arrR02, arrR03, arrR15) {
-        this.rcgID = arrR02[0];
+        this.rcgID = arrR03[0];
         this.mode = MODE_TABLE[arrR02[9]];
-        this.lowLmtAuto = arrR03[18] === 1 ? arrR15[3] / 2 : -1;
-        this.upLmtAuto = arrR03[18] === 1 ? arrR15[4] / 2 : -1;
+        this.lowLmtAuto = arrR03[18] === 1 && arrR03[81] !== 1 ?
+            arrR15[3] / 2 : -1;
+        this.upLmtAuto = arrR03[18] === 1 && arrR03[81] !== 1 ?
+            arrR15[4] / 2 : -1;
         this.lowLmtHeat = arrR03[19] === 1 ? arrR15[5] / 2 : -1;
         this.upLmtHeat = arrR03[19] === 1 ? arrR15[6] / 2 : -1;
         this.lowLmtCool = arrR03[20] === 1 ? arrR15[7] / 2 : -1;
@@ -147,4 +149,4 @@ var TEMP_TABLE = [
 
 var MODE_TABLE = [
     '冷房', '除湿', '暖房', '自動', '送風', '混在', '機能無し', '冷暖別自動'
-]
+];

@@ -25,9 +25,8 @@
  * </p>
  * @class R03
  */
-let R03;
 
-R03 = (function () {
+var R03 = (function () {
     function R03(arr) {
         this.rcgID = arr[0];
         this.hasAuto = arr[18] === 1 && arr[81] !== 1;
@@ -46,7 +45,7 @@ R03 = (function () {
     return R03;
 }());
 
-let tempTable = [
+var tempTable = [
     '0.0', '0.5', '1.0', '1.5', '2.0',
     '2.5', '3.0', '3.5', '4.0', '4.5',
     '5.0', '5.5', '6.0', '6.5', '7.0',
@@ -78,7 +77,7 @@ let tempTable = [
 /**
  * 設定温度上下限データ
  */
-let TempData = /** @class */ (function () {
+var TempData = /** @class */ (function () {
     function TempData(name, value) {
         this.name = name;     // 表示温度
         this.value = value;   // 内部値
@@ -90,7 +89,7 @@ let TempData = /** @class */ (function () {
 /**
  * 設定温度上下限リスト
  */
-let TempRange = /** @class */ (function () {
+var TempRange = /** @class */ (function () {
     function TempRange(min, max) {
         this.tempList = [];
         // 温度リストを作成

@@ -13,12 +13,12 @@
 *
 * Include Semantic UI - 2.2.14 (http://www.semantic-ui.com/)
 * Include jQuery v3.3.1 (https://jquery.com/)
-* Include CSV-JS v1.1.1 (https://github.com/gkindel/CSV-JS)
 * Include AngularJS v1.6.9 (https://angularjs.org)
+* Include CSV-JS v1.1.1 (https://github.com/gkindel/CSV-JS)
 *
 */
 
-var dataRoot = 'tpcdata/case03/';
+var dataRoot = 'tpcdata/case01/';
 
 /***********************************************************
  * 温度上下限を算出

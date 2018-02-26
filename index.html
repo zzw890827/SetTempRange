@@ -249,8 +249,7 @@
             // 表データ作成
             $scope.tblDataR03 = [];
             selR03.forEach(value => {
-                $scope.tblDataR03.push(new R03(value));
-
+                $scope.tblDataR03.push(new StaticInfo(value));
             });
         }).then(function () { // DropDownを作成
             setDropDown(calTmpLmt(selR02, selR03, selR15));

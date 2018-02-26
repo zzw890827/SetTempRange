@@ -3,7 +3,7 @@
 *
 * http://www.fujitsu-general.com/jp/
 *
-* waterfall -v4.0 (2018-02-16T16:37:41+0900)
+* waterfall -v4.0 (2018-02-26T10:48:12+09)
 *
 * Copyright 2018 FUJITSU GENERAL LIMITED.
 *
@@ -11,10 +11,10 @@
 *
 * http://opensource.org/licenses/MIT
 *
+* Include AngularJS v1.6.9 (https://angularjs.org)
 * Include Semantic UI - 2.2.14 (http://www.semantic-ui.com/)
 * Include jQuery v3.3.1 (https://jquery.com/)
 * Include CSV-JS v1.1.1 (https://github.com/gkindel/CSV-JS)
-* Include AngularJS v1.6.9 (https://angularjs.org)
 *
 */
 
@@ -23,29 +23,100 @@
  * <p>
  *     R03の情報
  * </p>
- * @class R03
+ * @class StaticInfo
  */
 
-var R03 = (function () {
-    function R03(arr) {
-        this.rcgID = arr[0];
-        this.hasAuto = arr[18] === 1 && arr[81] !== 1;
-        this.hasCAuto = arr[81] === 1;
-        this.hasCool = arr[20] === 1;
-        this.hasHeat = arr[19] === 1;
-        this.lowLmtAuto = (arr[18] === 1 && arr[81] !== 1) ? arr[37] : -1;
-        this.upLmtAuto = (arr[18] === 1 && arr[81] !== 1) ? arr[38] : -1;
-        this.lowLmtCool = arr[20] === 1 ? arr[41] : -1;
-        this.upLmtCool = arr[20] === 1 ? arr[42] : -1;
-        this.lowLmtHeat = arr[19] === 1 ? arr[39] : -1;
-        this.upLmtHeat = arr[19] === 1 ? arr[40] : -1;
-        this.deadBand = arr[81] === 1 ? arr[82] : -1;
+var StaticInfo = (function () {
+    /**
+     *
+     * @param {Array<Number>} arrR03 R03情報
+     * @constructor
+     */
+    function StaticInfo(arrR03) {
+        this.rcgID = arrR03[0];
+        this.hasAuto = arrR03[18] === 1 && arrR03[81] !== 1;
+        this.hasCAuto = arrR03[81] === 1;
+        this.hasCool = arrR03[20] === 1;
+        this.hasHeat = arrR03[19] === 1;
+        this.lowLmtAuto = arrR03[18] === 1 && arrR03[81] !== 1 ?
+            arrR03[37] : -1;
+        this.upLmtAuto = arrR03[18] === 1 && arrR03[81] !== 1 ?
+            arrR03[38] : -1;
+        this.lowLmtCool = arrR03[20] === 1 ? arrR03[41] : -1;
+        this.upLmtCool = arrR03[20] === 1 ? arrR03[42] : -1;
+        this.lowLmtHeat = arrR03[19] === 1 ? arrR03[39] : -1;
+        this.upLmtHeat = arrR03[19] === 1 ? arrR03[40] : -1;
+        this.deadBand = arrR03[81] === 1 ? arrR03[82] : -1;
     }
 
-    return R03;
+    return StaticInfo;
 }());
 
-var tempTable = [
+/**
+ * 動的情報クラス
+ * <p>
+ *     R02とR15情報
+ * </p>
+ * @class DynamicInfo
+ */
+
+var DynamicInfo = (function () {
+    /**
+     *
+     * @param {Array<Number>} arrR02 運転情報
+     * @param {Array<Number>} arrR03 機能情報
+     * @param {Array<Number>} arrR15 温度情報
+     * @constructor
+     */
+    function DynamicInfo(arrR02, arrR03, arrR15) {
+        this.rcgID = arrR02[0];
+        this.mode = MODE_TABLE[arrR02[9]];
+        this.lowLmtAuto = arrR03[18] === 1 ? arrR15[3] / 2 : -1;
+        this.upLmtAuto = arrR03[18] === 1 ? arrR15[4] / 2 : -1;
+        this.lowLmtHeat = arrR03[19] === 1 ? arrR15[5] / 2 : -1;
+        this.upLmtHeat = arrR03[19] === 1 ? arrR15[6] / 2 : -1;
+        this.lowLmtCool = arrR03[20] === 1 ? arrR15[7] / 2 : -1;
+        this.upLmtCool = arrR03[20] === 1 ? arrR15[8] / 2 : -1;
+    }
+
+    return DynamicInfo;
+}());
+
+/**
+ * 設定温度上下限データ
+ */
+var TempData = /** @class */ (function () {
+    function TempData(name, value) {
+        this.name = name;     // 表示温度
+        this.value = value;   // 内部値
+    }
+
+    return TempData;
+}());
+
+/**
+ * 設定温度上下限リスト
+ */
+var TempRange = /** @class */ (function () {
+    function TempRange(min, max) {
+        this.tempList = [];
+        // 温度リストを作成
+        if (min >= 0 && min <= 127) {
+            for (let i = min, j = 0; i <= max; i++) {
+                this.tempList[j++] = new TempData(TEMP_TABLE[i] + '℃', i);
+            }
+        }
+    }
+
+    return TempRange;
+}());
+
+/**
+ * 定数：温度テーブル
+ * @type {string[]}
+ */
+
+var TEMP_TABLE = [
     '0.0', '0.5', '1.0', '1.5', '2.0',
     '2.5', '3.0', '3.5', '4.0', '4.5',
     '5.0', '5.5', '6.0', '6.5', '7.0',
@@ -74,31 +145,6 @@ var tempTable = [
     '62.5', '63.0', '63.5'
 ];
 
-/**
- * 設定温度上下限データ
- */
-var TempData = /** @class */ (function () {
-    function TempData(name, value) {
-        this.name = name;     // 表示温度
-        this.value = value;   // 内部値
-    }
-
-    return TempData;
-}());
-
-/**
- * 設定温度上下限リスト
- */
-var TempRange = /** @class */ (function () {
-    function TempRange(min, max) {
-        this.tempList = [];
-        // 温度リストを作成
-        if (min >= 0 && min <= 127) {
-            for (let i = min, j = 0; i <= max; i++) {
-                this.tempList[j++] = new TempData(tempTable[i] + '℃', i);
-            }
-        }
-    }
-
-    return TempRange;
-}());
+var MODE_TABLE = [
+    '冷房', '除湿', '暖房', '自動', '送風', '混在', '機能無し', '冷暖別自動'
+]

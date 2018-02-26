@@ -18,7 +18,7 @@
 *
 */
 
-var dataRoot = 'tpcdata/case03/';
+var dataRoot = 'tpcdata/case02/';
 
 /***********************************************************
  * 温度上下限を算出
@@ -105,11 +105,11 @@ function calTmpLmt(selR02, selR03, selR15) {
             // 暖房：機能あり
             if (parseInt(selR03[i][19]) === 1) {
                 tmpLmtTbl[2][0] = Math.max(   // Heat下限値
-                    tmpLmtTbl[1][0],
+                    tmpLmtTbl[2][0],
                     parseFloat(selR03[i][39]) * 2
                 );
                 tmpLmtTbl[2][1] = Math.min(  // Heat上限値
-                    tmpLmtTbl[1][1],
+                    tmpLmtTbl[2][1],
                     parseFloat(selR03[i][40]) * 2
                 );
                 tmpLmtTbl[2][2] = 1;  //　機能フラグ：ありにする
@@ -117,7 +117,7 @@ function calTmpLmt(selR02, selR03, selR15) {
             // 冷房：機能あり
             if (parseInt(selR03[i][20]) === 1) {
                 tmpLmtTbl[1][0] = Math.max(   // Cool下限値
-                    tmpLmtTbl[2][0],
+                    tmpLmtTbl[1][0],
                     parseFloat(selR03[i][41]) * 2
                 );
                 tmpLmtTbl[1][1] = Math.min(  // Cool上限値

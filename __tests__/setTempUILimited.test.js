@@ -1,6 +1,4 @@
-//const calTmpLmt = require('../static/js/setTempUILimited');
-
-import {calTmpLmt} from '../static/js/setTempUILimited';
+const calTmpLmt = require('../static/js/setTempUILimited');
 
 test('first test', () => {
     var selR02 = [

@@ -26,7 +26,7 @@ var dataRoot = 'tpcdata/case02/';
  *     1. 静的範囲算出
  *     2. 動的範囲算出
  *     3. 静的範囲∩動的範囲
- * </p>
+ * </p>j
  * @module  calTmpLim
  * @author
  * @version 1.0
@@ -61,9 +61,9 @@ function calTmpLmt(selR02, selR03, selR15) {
     // 静的範囲と動的範囲And取り
     // localGetStaAndDynTmp()
 
-    /***********************************************************
-     * localGetStaTmpLmt() 静的温度範囲及びデッドバンドの最大値を取得得
-     ***********************************************************/
+    /****************************************************************
+     * @method localGetStaTmpLmt 静的温度範囲及びデッドバンドの最大値を取得得
+     ***************************************************************/
     function localGetStaTmpLmt() {
         // 温度制限を集計
         for (var i = 0; i < selR03.length; i++) {
@@ -130,7 +130,7 @@ function calTmpLmt(selR02, selR03, selR15) {
     }
 
     /**********************************************************************
-     * localTuneCoolHeat(coolTbl, heatTbl) 冷暖別自動冷暖房温度補正
+     * @method localTuneCoolHeat 冷暖別自動冷暖房温度補正
      * @param {Array<Number>} coolTbl: Cool温度上下限、機能情報
      * @param {Array<Number>} heatTbl: Heat温度上下限、機能情報
      * @return {Array<Number>} tunedTmpTbl: 補正した温度(冷房下限値、暖房上限値)
@@ -149,3 +149,5 @@ function calTmpLmt(selR02, selR03, selR15) {
 
     return tmpLmtTbl;
 }
+
+module.exports = calTmpLmt;

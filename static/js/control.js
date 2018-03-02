@@ -39,6 +39,7 @@ function activateDropDown(min, max, elemID) {
         })
     ;
 }
+
 /**
  * DropDownListを非活性化
  * @module unactivateDropDown

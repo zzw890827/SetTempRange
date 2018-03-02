@@ -1,36 +1,21 @@
 const calTmpLmt = require('../static/js/setTempUILimited');
 const $ = require('jquery');
+const Sample = require('../sample/sample');
 
-test('first test', () => {
-    describe('Limit', () => {
-        var selR02 = [];
-        var selR03 = [
-            [257, 0, 257, 0, "RC.Group001", 0, " 0", "ABHA18LBTH", 1, 1, 1, 1, 1, 1, 4, 1, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 23.5, 29.5, 20, 26, 25, 35, 10, 30, 10, 32, 10, 30, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 4, 1, 4, 1, 4, 1, 5, 1, 5, 1, 5, 1, 5, 1, 1, 0, 0, 1, 8, 1, 7],
-            [258, 0, 258, 0, "RC.Group002", 2, " 0", "ABHA24LBTH", 1, 1, 1, 1, 1, 1, 4, 1, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 23.5, 29.5, 10, 26, 15, 35, 10, 30, 10, 32, 10, 30, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 4, 1, 4, 1, 4, 1, 5, 1, 5, 1, 5, 1, 5, 1, 1, 1, 0, 1, 2, 1, 2]
-        ];
 
-        var selR15 = [
-            [257, 1, 0, 20, 60, 20, 60, 20, 60],
-            [258, 1, 0, 20, 60, 20, 60, 20, 60]
-        ];
-        var ref = [
-            [-9007199254740991, 9007199254740991, 0],
-            [50, 70, 1],
-            [40, 52, 1],
-            [54, 70, 1],
-            [40, 52, 1]
-        ];
-        beforeEach(() => {
-            $.ajax({
-                url: '../tpcdata/case01/R02monUnit.csv',
-                type: 'GET',
-                async: false,
-                success: data => {
-                    selR02 = CSV.parse(data);
-                }
+describe('Normal Test', () => {
+    const sample = new Sample;
+    const testNameList = ['First', 'Second'];
+
+    for (var i = 0; i < testNameList.length; i++) {
+        (num => { // JSの仕組みによりclosureを設定すること
+            test(testNameList[num], () => {
+                expect(calTmpLmt(
+                    sample.selR02Tbl[num],
+                    sample.selR03Tbl[num],
+                    sample.selR15Tbl[num])).toEqual(sample.refTbl[num]);
             })
-        });
-        expect(calTmpLmt(selR02, selR03, selR15)).toEqual(ref);
-    })
+        })(i)
+    }
 
 });

@@ -18,7 +18,7 @@
 *
 */
 
-var dataRoot = 'tpcdata/case01/';
+var dataRoot = 'tpcdata/case03/';
 
 /***********************************************************
  * 温度上下限を算出
@@ -37,8 +37,8 @@ var dataRoot = 'tpcdata/case01/';
  * @return {Array<Array>} tmpLmtTbl 度上下限テーブル(0~127)
  ************************************************************/
 function calTmpLmt(selR02, selR03, selR15) {
-    var MIN = Number.MIN_SAFE_INTEGER;
-    var MAX = Number.MAX_SAFE_INTEGER;
+    var MIN = -1;
+    var MAX = 128;
     // 出力用テーブルを初期化
     var tmpLmtTbl = [
         [MIN, MAX, 0],   // Auto

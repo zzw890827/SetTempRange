@@ -18,7 +18,7 @@
 *
 */
 
-var dataRoot = 'tpcdata/case03/';
+var dataRoot = 'tpcdata/case01/';
 
 /***********************************************************
  * 温度上下限を算出
@@ -26,7 +26,7 @@ var dataRoot = 'tpcdata/case03/';
  *     1. 静的範囲算出
  *     2. 動的範囲算出
  *     3. 静的範囲∩動的範囲
- * </p>j
+ * </p>
  * @module  calTmpLim
  * @author
  * @version 1.0
@@ -37,8 +37,8 @@ var dataRoot = 'tpcdata/case03/';
  * @return {Array<Array>} tmpLmtTbl 度上下限テーブル(0~127)
  ************************************************************/
 function calTmpLmt(selR02, selR03, selR15) {
-    var MIN = -1;
-    var MAX = 128;
+    var MIN = 0;
+    var MAX = 127;
     // 出力用テーブルを初期化
     var tmpLmtTbl = [
         [MIN, MAX, 0],   // Auto
@@ -47,24 +47,24 @@ function calTmpLmt(selR02, selR03, selR15) {
         [MIN, MAX, 0],   // C.Auto.Cool
         [MIN, MAX, 0]    // C.Auto.Heat
     ];
+
     var deadBand = MIN;
     // 静的温度上下限を取得（And取り）
-    localGetStaTmpLmt();
+    localCalStaTmpLmt();
     if (tmpLmtTbl[3][2] === 1 || tmpLmtTbl[4][2] === 1) {
         // 冷暖別自動冷暖房温度補正
         var tunedTmp = localTuneCoolHeat(tmpLmtTbl[3], tmpLmtTbl[4]);
         tmpLmtTbl[3][0] = tunedTmp[0];
         tmpLmtTbl[4][1] = tunedTmp[1];
     }
-    // 動的温度範囲を取得
-    //localGetDymTempMinMax();
+
     // 静的範囲と動的範囲And取り
     // localGetStaAndDynTmp()
 
     /****************************************************************
-     * @method localGetStaTmpLmt 静的温度範囲及びデッドバンドの最大値を取得得
-     ***************************************************************/
-    function localGetStaTmpLmt() {
+     * localCalStaTmpLmt 静的温度範囲及びデッドバンドの最大値を取得得
+     ****************************************************************/
+    function localCalStaTmpLmt() {
         // 温度制限を集計
         for (var i = 0; i < selR03.length; i++) {
             if (parseInt(selR03[i][18]) === 1 &&   // Auto：機能あり且冷暖別なし
@@ -130,10 +130,35 @@ function calTmpLmt(selR02, selR03, selR15) {
     }
 
     /**********************************************************************
-     * @method localTuneCoolHeat 冷暖別自動冷暖房温度補正
-     * @param {Array<Number>} coolTbl: Cool温度上下限、機能情報
-     * @param {Array<Number>} heatTbl: Heat温度上下限、機能情報
-     * @return {Array<Number>} tunedTmpTbl: 補正した温度(冷房下限値、暖房上限値)
+     * method localIsModeMixed 運転モード判定
+     * return {Boolean}  true: 混在 false: 単一
+     *********************************************************************/
+    function localIsModeMixed() {
+        var this_value = selR02[0][9] === 7 ? 3 : selR02[0][9]; // 新自動の場合
+        var temp;
+        for (var i = 1; i < selR02.length; i++) {
+            temp = selR02[i][9] === 7 ? 3 : selR02[i][9];
+            if (this_value !== temp) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**********************************************************************
+     * method localGetDyTmpMixed 動的温度混在判定
+     * param {Number} idx 参照したい配列のIndex
+     * return {Boolean}  true: 混在 false: 単一
+     *********************************************************************/
+    function localGetDyTmpMixed(idx) {
+
+    }
+
+    /**********************************************************************
+     * method localGetMode 冷暖別自動冷暖房温度補正
+     * param {Array<Number>} coolTbl: Cool温度上下限、機能情報
+     * param {Array<Number>} heatTbl: Heat温度上下限、機能情報
+     * return {Array<Number>} tunedTmpTbl: 補正した温度(冷房下限値、暖房上限値)
      *********************************************************************/
     function localTuneCoolHeat(coolTbl, heatTbl) {
         var tunedTmpLmtTbl = [];
@@ -145,6 +170,44 @@ function calTmpLmt(selR02, selR03, selR15) {
                 heatTbl[1] : coolTbl[1] - deadBand;
 
         return tunedTmpLmtTbl;
+    }
+
+    /**********************************************************************
+     * method localCheckRegular 動的温度採用可否判定
+     * return {Boolean} true: 採用 false: 採用しない
+     *********************************************************************/
+    function localCheckRegular() {
+        // 同じ運転モード若しくはAutoとC.Auto混在じゃない場合採用しない
+        if (!localIsModeMixed()) {
+            return false;
+        }
+    }
+
+    /**********************************************************************
+     * method localIsMixedAuto 動的自動温度チェック
+     * return {Boolean}  true: 混在 false: 単一
+     *********************************************************************/
+    function localIsMixedAuto() {
+        var lowerFlg = -1;
+        var upperFlg = -1;
+        for (var i = 0; i < selR15.length; i++) {
+            if (selR03[i][81] === 1 || selR03[i][18] === 0) {  //新自動、無し
+                continue;
+            }
+            if (selR03[i][18] === 1) {
+                if(lowerFlg === -1) {
+                    lowerFlg = selR15[i][3];
+                } else if (lowerFlg !== selR15[i][3]) {
+                    return true;
+                }
+                if(upperFlg === -1) {
+                    upperFlg = selR15[i][4];
+                } else if (lowerFlg !== selR15[i][4]) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     return tmpLmtTbl;

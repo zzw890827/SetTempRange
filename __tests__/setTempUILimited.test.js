@@ -1,55 +1,28 @@
 const calTmpLmt = require('../static/js/setTempUILimited');
-const $ = require('jquery');
-const Sample = require('../sample/sample');
+const fs = require('fs');
+const CSV = require('../static/vendor/csv');
 
-
-describe('Zhao', () => {
-    const sample = new Sample;
-    const testNameList = ['1st', '2nd', '3rd'];
-
-    for (var i = 0; i < testNameList.length; i++) {
-        (num => { // JSの仕組みによりclosureを設定すること
-            test(testNameList[num], () => {
-                expect(calTmpLmt(
-                    sample.selR02Tbl[num],
-                    sample.selR03Tbl[num],
-                    sample.selR15Tbl[num])).toEqual(sample.refTbl[num]);
+describe('Name: Zhao', () => {
+    let selR02;
+    let selR03;
+    let selR15;
+    let ref;
+    const totalCase = 7;
+    for (let i = 0; i < totalCase; i++) {
+        (num => {
+            test('case' + ('00' + (num + 1).toString()).slice(-2), () => {
+                let caseRoot = './tpcdata/case'
+                    + ('00' + (num + 1).toString()).slice(-2) + '/';
+                let r02Path = caseRoot + 'R02monUnit.csv';
+                let r03Path = caseRoot + 'R03infUnit.csv';
+                let r15Path = caseRoot + 'R15tempSet.csv';
+                let refPath = caseRoot + 'reference.txt';
+                selR02 = CSV.parse(fs.readFileSync(r02Path).toString());
+                selR03 = CSV.parse(fs.readFileSync(r03Path).toString());
+                selR15 = CSV.parse(fs.readFileSync(r15Path).toString());
+                ref = CSV.parse(fs.readFileSync(refPath).toString());
+                expect(calTmpLmt(selR02, selR03, selR15)).toEqual(ref);
             })
         })(i)
     }
-
-});
-
-describe('Usui', () => {
-    const sample = new Sample;
-    const testNameList = ['1st', '2nd', '3rd'];
-
-    for (var i = 0; i < testNameList.length; i++) {
-        (num => { // JSの仕組みによりclosureを設定すること
-            test(testNameList[num], () => {
-                expect(calTmpLmt(
-                    sample.selR02Tbl[num],
-                    sample.selR03Tbl[num],
-                    sample.selR15Tbl[num])).toEqual(sample.refTbl[num]);
-            })
-        })(i)
-    }
-
-});
-
-describe('Tsuji', () => {
-    const sample = new Sample;
-    const testNameList = ['1st', '2nd', '3rd'];
-
-    for (var i = 0; i < testNameList.length; i++) {
-        (num => { // JSの仕組みによりclosureを設定すること
-            test(testNameList[num], () => {
-                expect(calTmpLmt(
-                    sample.selR02Tbl[num],
-                    sample.selR03Tbl[num],
-                    sample.selR15Tbl[num])).toEqual(sample.refTbl[num]);
-            })
-        })(i)
-    }
-
 });

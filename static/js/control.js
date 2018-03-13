@@ -35,7 +35,7 @@ function activateDropDown(min, max, elemID) {
     ;
     selElm
         .dropdown({
-            values: new TempRange(min, max).tempList.reverse()
+            values: new TempRange(min, max).tempList
         })
     ;
 }

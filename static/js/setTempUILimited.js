@@ -18,7 +18,7 @@
 *
 */
 
-var dataRoot = 'tpcdata/case01/';
+var dataRoot = 'tpcdata/case15/';
 
 /***********************************************************
  * 温度上下限を算出
@@ -48,18 +48,36 @@ function calTmpLmt(selR02, selR03, selR15) {
         [MIN, MAX, 0]    // C.Auto.Heat
     ];
 
+    var dyTmpLmtTbl = [
+        [-1, -1, 1],   // Auto
+        [-1, -1, 1],   // Cool
+        [-1, -1, 1],   // Heat
+        [-1, -1, 1],   // C.Auto.Cool
+        [-1, -1, 1]    // C.Auto.Heat
+    ];
+
     var deadBand = MIN;
     // 静的温度上下限を取得（And取り）
     localCalStaTmpLmt();
+
+    // 運転モード混在
+    if (localIsModeMixed()) {
+        return tmpLmtTbl;
+    }
+    // 動的温度を修正
+    localCorrectTemp();
+    // 動的温度範囲取得
+
+    localGetDymTmp();
+    // 静的範囲と動的範囲And取り
+    localGetStaAndDynTmp();
+    // デッドバンド確保
     if (tmpLmtTbl[3][2] === 1 || tmpLmtTbl[4][2] === 1) {
         // 冷暖別自動冷暖房温度補正
         var tunedTmp = localTuneCoolHeat(tmpLmtTbl[3], tmpLmtTbl[4]);
         tmpLmtTbl[3][0] = tunedTmp[0];
         tmpLmtTbl[4][1] = tunedTmp[1];
     }
-
-    // 静的範囲と動的範囲And取り
-    // localGetStaAndDynTmp()
 
     /****************************************************************
      * localCalStaTmpLmt 静的温度範囲及びデッドバンドの最大値を取得得
@@ -146,16 +164,7 @@ function calTmpLmt(selR02, selR03, selR15) {
     }
 
     /**********************************************************************
-     * method localGetDyTmpMixed 動的温度混在判定
-     * param {Number} idx 参照したい配列のIndex
-     * return {Boolean}  true: 混在 false: 単一
-     *********************************************************************/
-    function localGetDyTmpMixed(idx) {
-
-    }
-
-    /**********************************************************************
-     * method localGetMode 冷暖別自動冷暖房温度補正
+     * method localTuneCoolHeat 冷暖別自動冷暖房温度補正
      * param {Array<Number>} coolTbl: Cool温度上下限、機能情報
      * param {Array<Number>} heatTbl: Heat温度上下限、機能情報
      * return {Array<Number>} tunedTmpTbl: 補正した温度(冷房下限値、暖房上限値)
@@ -173,41 +182,96 @@ function calTmpLmt(selR02, selR03, selR15) {
     }
 
     /**********************************************************************
-     * method localCheckRegular 動的温度採用可否判定
-     * return {Boolean} true: 採用 false: 採用しない
+     * method localCorrectTemp R15に機能無しの温度を-1に修正
      *********************************************************************/
-    function localCheckRegular() {
-        // 同じ運転モード若しくはAutoとC.Auto混在じゃない場合採用しない
-        if (!localIsModeMixed()) {
-            return false;
+    function localCorrectTemp() {
+        for (var i = 0; i < selR15.length; i++) {
+            if (selR03[i][18] === 0 || selR03[i][81] === 1) { // Auto
+                selR15[i][3] = selR15[i][4] = -1;
+            }
+            if (selR03[i][19] === 0) { // Heat
+                selR15[i][5] = selR15[i][6] = -1;
+            }
+            if (selR03[i][20] === 0) { // Cool
+                selR15[i][7] = selR15[i][8] = -1;
+            }
         }
     }
 
+
     /**********************************************************************
-     * method localIsMixedAuto 動的自動温度チェック
-     * return {Boolean}  true: 混在 false: 単一
+     * method localGetDymTmp 動的温度集約
      *********************************************************************/
-    function localIsMixedAuto() {
-        var lowerFlg = -1;
-        var upperFlg = -1;
+    function localGetDymTmp() {
+        // Auto
+        dyTmpLmtTbl[0][0] = localGetValue(3);
+        dyTmpLmtTbl[0][1] = localGetValue(4);
+        if (dyTmpLmtTbl[0][0] === -1 || dyTmpLmtTbl[0][1] === -1) {
+            dyTmpLmtTbl[0][2] = 0;
+        }
+        // Cool
+        dyTmpLmtTbl[1][0] = localGetValue(7);
+        dyTmpLmtTbl[1][1] = localGetValue(8);
+        if (dyTmpLmtTbl[1][0] === -1 || dyTmpLmtTbl[1][1] === -1) {
+            dyTmpLmtTbl[1][2] = 0;
+        }
+        // Heat
+        dyTmpLmtTbl[2][0] = localGetValue(5);
+        dyTmpLmtTbl[2][1] = localGetValue(6);
+        if (dyTmpLmtTbl[2][0] === -1 || dyTmpLmtTbl[2][1] === -1) {
+            dyTmpLmtTbl[2][2] = 0;
+        }
+        // C.Cool
+        dyTmpLmtTbl[3][0] = dyTmpLmtTbl[1][0];
+        dyTmpLmtTbl[3][1] = dyTmpLmtTbl[1][1];
+        if (dyTmpLmtTbl[3][0] === -1 || dyTmpLmtTbl[3][1] === -1) {
+            dyTmpLmtTbl[3][2] = 0;
+        }
+        // C.Heat
+        dyTmpLmtTbl[4][0] = dyTmpLmtTbl[2][0];
+        dyTmpLmtTbl[4][1] = dyTmpLmtTbl[2][1];
+        if (dyTmpLmtTbl[4][0] === -1 || dyTmpLmtTbl[4][1] === -1) {
+            dyTmpLmtTbl[4][2] = 0;
+        }
+
+    }
+
+    /**********************************************************************
+     * method localGetValue 対象列集約をする
+     * param {Number} idx 対象列のインデクス
+     * return {Number} -1 混在、集約失敗 集約値
+     *********************************************************************/
+    function localGetValue(idx) {
+        var value = -1;
         for (var i = 0; i < selR15.length; i++) {
-            if (selR03[i][81] === 1 || selR03[i][18] === 0) {  //新自動、無し
+            if (selR15[i][idx] === -1) {  //機能無し
                 continue;
             }
-            if (selR03[i][18] === 1) {
-                if(lowerFlg === -1) {
-                    lowerFlg = selR15[i][3];
-                } else if (lowerFlg !== selR15[i][3]) {
-                    return true;
+            if (value === -1) {
+                value = selR15[i][idx];
+            } else if (value !== selR15[i][idx]) {
+                return -1;
+            }
+        }
+        return value;
+    }
+
+    /**********************************************************************
+     * localGetStaAndDynTmp 静的と動的AND取り
+     *********************************************************************/
+    function localGetStaAndDynTmp() {
+        for (var i = 0; i < 5; i++) {
+            if (tmpLmtTbl[i][2] === 1 &&
+                dyTmpLmtTbl[i][2] === 1 &&
+                dyTmpLmtTbl[i][0] < dyTmpLmtTbl[i][1]) {
+                if (dyTmpLmtTbl[i][0] >= tmpLmtTbl[i][0]) { // 静的範囲超えな
+                    tmpLmtTbl[i][0] = dyTmpLmtTbl[i][0];
                 }
-                if(upperFlg === -1) {
-                    upperFlg = selR15[i][4];
-                } else if (lowerFlg !== selR15[i][4]) {
-                    return true;
+                if (dyTmpLmtTbl[i][1] <= tmpLmtTbl[i][1]) {
+                    tmpLmtTbl[i][1] = dyTmpLmtTbl[i][1];
                 }
             }
         }
-        return false;
     }
 
     return tmpLmtTbl;

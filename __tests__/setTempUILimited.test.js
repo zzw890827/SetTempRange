@@ -7,7 +7,7 @@ describe('Name: Zhao', () => {
     let selR03;
     let selR15;
     let ref;
-    const totalCase = 15;
+    const totalCase = 45;
     for (let i = 0; i < totalCase; i++) {
         (num => {
             test('case' + ('00' + (num + 1).toString()).slice(-2), () => {

@@ -97,6 +97,18 @@
                         機能無し
                     </div>
                 </div>
+                <div class="item">
+                    <div class="ui selection dropdown" id="mix">
+                        <input name="Mixed" type="hidden">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">Mixed</div>
+                        <div class="menu"></div>
+                    </div>
+                    <div class="ui left pointing blue basic label"
+                         id="funLabMixed">
+                        モード混在
+                    </div>
+                </div>
             </div>
         </div>
         <!-- 詳細領域 -->
@@ -269,7 +281,7 @@
 
 <!-- アプリ -->
 <script>
-    var myApp = angular.module('myApp', []);
+    let myApp = angular.module('myApp', []);
     myApp.controller('stsTblCtl', function ($scope, $q, $http) {
         $q.all({  // ローカルファイル読み込む
             selR02: $http.get(`${dataRoot}R02monUnit.csv`),
@@ -286,7 +298,7 @@
             selR03.forEach(value => {
                 $scope.staticTbl.push(new StaticInfo(value));
             });
-            for (var i = 0; i < selR02.length; i++) {
+            for (let i = 0; i < selR02.length; i++) {
                 $scope.dynamicTbl.push(new DynamicInfo(
                     selR02[i],
                     selR03[i],

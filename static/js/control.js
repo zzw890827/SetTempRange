@@ -30,9 +30,7 @@
  */
 function activateDropDown(min, max, elemID) {
     let selElm = angular.element(document.getElementById(elemID));
-    selElm
-        .dropdown('restore default text')
-    ;
+    selElm.dropdown('restore default text');
     selElm
         .dropdown({
             values: new TempRange(min, max).tempList
@@ -49,9 +47,7 @@ function activateDropDown(min, max, elemID) {
  */
 function unactivateDropDown(elemID) {
     let selElm = angular.element(document.getElementById(elemID));
-    selElm
-        .addClass('disabled')
-    ;
+    selElm.addClass('disabled');
 }
 
 /**
@@ -80,15 +76,13 @@ function ctlFunLabel(flg, elemID) {
 
 function setDropDown(tmpLmtTbl) {
     // 温度上下限を読み込む
-    var drpDnIdTbl = [
-        'auto', 'cool', 'heat', 'cautocool', 'cautoheat'
-    ];
+    var drpDnIdTbl = ['auto', 'cool', 'heat', 'cautocool', 'cautoheat', 'mix'];
     var funLabIdTbl = [
         'funLabAuto',
         'funLabCool',
         'funLabHeat',
         'funLabCCool',
-        'funLabCHeat',
+        'funLabCHeat'
     ];
     for (var i = 0; i < drpDnIdTbl.length; i++) {
         activateDropDown(tmpLmtTbl[i][0], tmpLmtTbl[i][1], drpDnIdTbl[i]);
@@ -97,4 +91,9 @@ function setDropDown(tmpLmtTbl) {
             unactivateDropDown(drpDnIdTbl[i]);
         }
     }
+    // 混在ラベル
+    if (tmpLmtTbl[5][2] === 1) {
+        angular.element(document.getElementById('funLabMixed')).show();
+    }
 }
+
